@@ -581,7 +581,7 @@ async function testConnection() {
     const ipAddress = document.getElementById('laptopIP').value.trim();
     
     if (!ipAddress) {
-        addSyncLog('❌ Please enter laptop IP address', 'error');
+        addToSyncLog('❌ Please enter laptop IP address');
         return;
     }
     
@@ -589,7 +589,7 @@ async function testConnection() {
     testButton.textContent = 'Testing...';
     
     try {
-        addSyncLog('🔍 Testing connection...');
+        addToSyncLog('🔍 Testing connection...');
         
         const response = await fetch(`http://${ipAddress}:3000/api/test`, {
             method: 'GET',
@@ -600,15 +600,15 @@ async function testConnection() {
         
         if (response.ok) {
             const result = await response.json();
-            addSyncLog('✅ Connection successful! Server is reachable.', 'success');
+            addToSyncLog('✅ Connection successful! Server is reachable.');
         } else {
             throw new Error(`Server responded with status: ${response.status}`);
         }
         
     } catch (error) {
         console.error('Connection test error:', error);
-        addSyncLog(`❌ Connection failed: ${error.message}`, 'error');
-        addSyncLog('Make sure the server is running on your laptop and you\'re on the same network.');
+        addToSyncLog(`❌ Connection failed: ${error.message}`);
+        addToSyncLog('Make sure the server is running on your laptop and you\'re on the same network.');
     } finally {
         testButton.disabled = false;
         testButton.textContent = 'Test Connection';
@@ -617,12 +617,13 @@ async function testConnection() {
 
 // Replace your existing syncToLaptop function with this:
 async function syncToLaptop() {
+    
     const syncButton = document.getElementById('syncButton');
     const syncLog = document.getElementById('syncLog');
     const ipAddress = document.getElementById('laptopIP').value.trim();
     
     if (!ipAddress) {
-        addSyncLog('❌ Please enter laptop IP address', 'error');
+        addToSyncLog('❌ Please enter laptop IP address');
         return;
     }
     
@@ -631,15 +632,15 @@ async function syncToLaptop() {
     
     try {
         // Get unsynced matches
-        const matches = JSON.parse(localStorage.getItem('scoutData') || '[]');
+        const matches = JSON.parse(localStorage.getItem('vexScoutMatches') || '[]');
         const unsyncedMatches = matches.filter(match => !match.synced);
         
         if (unsyncedMatches.length === 0) {
-            addSyncLog('✅ No unsynced data found', 'success');
+            addToSyncLog('✅ No unsynced data found');
             return;
         }
         
-        addSyncLog(`📤 Sending ${unsyncedMatches.length} matches...`);
+        addToSyncLog(`📤 Sending ${unsyncedMatches.length} matches...`);
         
         // Send data to laptop
         const response = await fetch(`http://${ipAddress}:3000/api/matches`, {
@@ -668,20 +669,20 @@ async function syncToLaptop() {
             });
             
             // Save updated data
-            localStorage.setItem('scoutData', JSON.stringify(matches));
+            localStorage.setItem('vexScoutMatches', JSON.stringify(matches));
             
             // Update display
             displayMatches();
             updateSyncTab();
             
-            addSyncLog(`✅ Successfully synced ${unsyncedMatches.length} matches!`, 'success');
+            addToSyncLog(`✅ Successfully synced ${unsyncedMatches.length} matches!`);
         } else {
             throw new Error(`Server responded with status: ${response.status}`);
         }
         
     } catch (error) {
         console.error('Sync error:', error);
-        addSyncLog(`❌ Sync failed: ${error.message}`, 'error');
+        addToSyncLog(`❌ Sync failed: ${error.message}`);
     } finally {
         syncButton.disabled = false;
         syncButton.textContent = 'Sync to Laptop';
@@ -697,7 +698,7 @@ async function syncToLaptop() {
     const ipAddress = document.getElementById('laptopIP').value.trim();
     
     if (!ipAddress) {
-        addSyncLog('❌ Please enter laptop IP address', 'error');
+        addToSyncLog('❌ Please enter laptop IP address');
         return;
     }
     
@@ -710,11 +711,11 @@ async function syncToLaptop() {
         const unsyncedMatches = matches.filter(match => !match.synced);
         
         if (unsyncedMatches.length === 0) {
-            addSyncLog('✅ No unsynced data found', 'success');
+            addToSyncLog('✅ No unsynced data found');
             return;
         }
         
-        addSyncLog(`📤 Sending ${unsyncedMatches.length} matches...`);
+        addToSyncLog(`📤 Sending ${unsyncedMatches.length} matches...`);
         
         // Send data to laptop
         const response = await fetch(`http://${ipAddress}:3000/api/matches`, {
@@ -746,17 +747,17 @@ async function syncToLaptop() {
             localStorage.setItem('scoutData', JSON.stringify(matches));
             
             // Update display
-            displayMatches();
+            updateDataView();
             updateSyncTab();
             
-            addSyncLog(`✅ Successfully synced ${unsyncedMatches.length} matches!`, 'success');
+            addToSyncLog(`✅ Successfully synced ${unsyncedMatches.length} matches!`);
         } else {
             throw new Error(`Server responded with status: ${response.status}`);
         }
         
     } catch (error) {
         console.error('Sync error:', error);
-        addSyncLog(`❌ Sync failed: ${error.message}`, 'error');
+        addToSyncLog(`❌ Sync failed: ${error.message}`);
     } finally {
         syncButton.disabled = false;
         syncButton.textContent = 'Sync to Laptop';
