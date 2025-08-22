@@ -20,13 +20,16 @@
     <div class="container">
         <div class="header">
             <h1>VEX Scout</h1>
-            <div class="match-counter">Matches Recorded: <span id="matchCount">0</span></div>
+            <div class="match-counter">
+                Local: <span id="localCount">0</span> | 
+                Synced: <span id="syncedCount">0</span>
+            </div>
         </div>
 
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('scout')">Scout</button>
             <button class="nav-tab" onclick="switchTab('data')">Data</button>
-            <button class="nav-tab" onclick="switchTab('export')">Export</button>
+            <button class="nav-tab" onclick="switchTab('sync')">Sync</button>
         </div>
 
         <div id="scout-tab" class="tab-content active">
@@ -39,6 +42,9 @@
             </div>
 
             <form id="scoutForm">
+                <!-- BASIC INFO SECTION -->
+                <div class="section-header">📋 Basic Information</div>
+                
                 <div class="form-group">
                     <label for="matchNumber">Match Number <span class="required">*</span></label>
                     <input type="number" id="matchNumber" required min="1">
@@ -51,9 +57,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Autonomous Period</label>
-                    
-                    <label for="autoGoalRush">Goal Rush Bonus</label>
+                    <label for="alliance">Alliance Color</label>
+                    <select id="alliance">
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                    </select>
+                </div>
+
+                <!-- AUTONOMOUS SECTION - EASY TO MODIFY -->
+                <div class="section-header">🤖 Autonomous Period (15 seconds)</div>
+                
+                <!-- RADIO BUTTON METRIC - Copy this pattern for yes/no questions -->
+                <div class="form-group">
+                    <label>Goal Rush Bonus</label>
                     <div class="radio-group">
                         <label class="radio-option">
                             <input type="radio" name="autoGoalRush" value="yes"> Yes
@@ -62,15 +78,20 @@
                             <input type="radio" name="autoGoalRush" value="no" checked> No
                         </label>
                     </div>
+                </div>
 
-                    <label for="autoRingsScored">Rings Scored</label>
+                <!-- COUNTER METRIC - Copy this pattern for counting things -->
+                <div class="form-group">
+                    <label>Rings Scored in Mobile Goals</label>
                     <div class="counter-group">
                         <button type="button" class="counter-btn" onclick="changeCounter('autoRingsScored', -1)">-</button>
                         <div class="counter-value" id="autoRingsScored">0</div>
                         <button type="button" class="counter-btn" onclick="changeCounter('autoRingsScored', 1)">+</button>
                     </div>
+                </div>
 
-                    <label for="autoMogos">Mobile Goals Scored</label>
+                <div class="form-group">
+                    <label>Mobile Goals Scored</label>
                     <div class="counter-group">
                         <button type="button" class="counter-btn" onclick="changeCounter('autoMogos', -1)">-</button>
                         <div class="counter-value" id="autoMogos">0</div>
@@ -79,16 +100,28 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Driver Control Period</label>
-                    
-                    <label for="driverRingsScored">Rings Scored</label>
+                    <label>Rings Scored in Corner</label>
+                    <div class="counter-group">
+                        <button type="button" class="counter-btn" onclick="changeCounter('autoCornerRings', -1)">-</button>
+                        <div class="counter-value" id="autoCornerRings">0</div>
+                        <button type="button" class="counter-btn" onclick="changeCounter('autoCornerRings', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- DRIVER CONTROL SECTION - EASY TO MODIFY -->
+                <div class="section-header">🕹️ Driver Control Period (1:45)</div>
+                
+                <div class="form-group">
+                    <label>Rings Scored in Mobile Goals</label>
                     <div class="counter-group">
                         <button type="button" class="counter-btn" onclick="changeCounter('driverRingsScored', -1)">-</button>
                         <div class="counter-value" id="driverRingsScored">0</div>
                         <button type="button" class="counter-btn" onclick="changeCounter('driverRingsScored', 1)">+</button>
                     </div>
+                </div>
 
-                    <label for="driverMogos">Mobile Goals Controlled</label>
+                <div class="form-group">
+                    <label>Mobile Goals Controlled</label>
                     <div class="counter-group">
                         <button type="button" class="counter-btn" onclick="changeCounter('driverMogos', -1)">-</button>
                         <div class="counter-value" id="driverMogos">0</div>
@@ -97,77 +130,219 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="endgame">Endgame</label>
+                    <label>Rings Scored in Corner</label>
+                    <div class="counter-group">
+                        <button type="button" class="counter-btn" onclick="changeCounter('driverCornerRings', -1)">-</button>
+                        <div class="counter-value" id="driverCornerRings">0</div>
+                        <button type="button" class="counter-btn" onclick="changeCounter('driverCornerRings', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- DROPDOWN METRIC - Copy this pattern for multiple choice -->
+                <div class="form-group">
+                    <label>Robot Speed/Agility</label>
+                    <select id="robotSpeed">
+                        <option value="slow">Slow</option>
+                        <option value="average" selected>Average</option>
+                        <option value="fast">Fast</option>
+                        <option value="very-fast">Very Fast</option>
+                    </select>
+                </div>
+
+                <!-- ENDGAME SECTION -->
+                <div class="section-header">⏰ Endgame (Last 30 seconds)</div>
+                
+                <div class="form-group">
+                    <label>Climb Status</label>
                     <div class="radio-group">
                         <label class="radio-option">
                             <input type="radio" name="endgame" value="none" checked> None
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="endgame" value="single"> Single
+                            <input type="radio" name="endgame" value="attempted"> Attempted
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="endgame" value="double"> Double
+                            <input type="radio" name="endgame" value="single"> Single Climb
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="endgame" value="double"> Double Climb
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUALITATIVE SECTION -->
+                <div class="section-header">📝 Qualitative Assessment</div>
+                
+                <div class="form-group">
+                    <label>Defense Rating</label>
+                    <select id="defenseRating">
+                        <option value="none">No Defense</option>
+                        <option value="weak">Weak Defense</option>
+                        <option value="average" selected>Average Defense</option>
+                        <option value="strong">Strong Defense</option>
+                        <option value="excellent">Excellent Defense</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Driver Skill</label>
+                    <select id="driverSkill">
+                        <option value="poor">Poor</option>
+                        <option value="below-average">Below Average</option>
+                        <option value="average" selected>Average</option>
+                        <option value="above-average">Above Average</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Reliability Issues</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="brokeDown"> Broke Down
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="tippedOver"> Tipped Over
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="stuckOnField"> Got Stuck
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="slowRepairs"> Needed Repairs
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="notes">Notes</label>
-                    <textarea id="notes" placeholder="Qualitative observations..."></textarea>
+                    <label>Additional Notes</label>
+                    <textarea id="notes" placeholder="Strategy, special moves, partnership notes..."></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Save Match Data</button>
-                <button type="button" class="btn btn-secondary" onclick="resetForm()">Clear Form</button>
+                <button type="submit" class="btn btn-primary">💾 Save Match Data</button>
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Clear Form</button>
             </form>
         </div>
 
         <div id="data-tab" class="tab-content">
-            <h3>Recorded Matches</h3>
+            <div class="data-summary">
+                <h3>📊 Local Data</h3>
+                <div class="summary-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalLocalMatches">0</span>
+                        <span class="stat-label">Total Matches</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="unsyncedMatches">0</span>
+                        <span class="stat-label">Unsynced</span>
+                    </div>
+                </div>
+            </div>
+            
             <div id="matchList" class="match-list">
                 <p style="text-align: center; color: #6b7280; padding: 20px;">No matches recorded yet</p>
             </div>
-            <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+            
+            <div class="data-actions">
+                <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Local Data</button>
+            </div>
         </div>
 
-        <div id="export-tab" class="tab-content">
-            <div id="exportSuccess" style="display: none;"></div>
+        <div id="sync-tab" class="tab-content">
+            <div id="syncSuccess" style="display: none;"></div>
             
-            <h3>Export Data</h3>
-            <p style="margin-bottom: 20px; color: #6b7280;">Share your scouting data with your team</p>
-            
-            <button class="btn btn-primary" onclick="exportToEmail()">📧 Email Export</button>
-            <button class="btn btn-secondary" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
-            
-            <div style="margin-top: 30px;">
-                <h4>Data Summary</h4>
-                <div id="dataSummary" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 10px;">
-                    <div>Total Matches: <span id="totalMatches">0</span></div>
-                    <div>Last Updated: <span id="lastUpdated">Never</span></div>
+            <div class="sync-status">
+                <h3>📡 Sync to Laptop</h3>
+                <div class="status-indicator" id="syncStatus">
+                    <div class="status-dot offline"></div>
+                    <span>Not Connected</span>
                 </div>
+            </div>
+
+            <div class="sync-settings">
+                <div class="form-group">
+                    <label for="laptopIP">Laptop IP Address</label>
+                    <input type="text" id="laptopIP" placeholder="192.168.1.100" value="">
+                    <div class="help-text">Find your laptop's IP address and enter it here</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="syncPort">Port (Optional)</label>
+                    <input type="number" id="syncPort" placeholder="3000" value="3000">
+                </div>
+            </div>
+
+            <div class="sync-actions">
+                <button class="btn btn-primary" onclick="testConnection()">🔍 Test Connection</button>
+                <button class="btn btn-success" onclick="syncToLaptop()" id="syncButton" disabled>
+                    📤 Sync All Data (<span id="pendingCount">0</span> matches)
+                </button>
+                <button class="btn btn-secondary" onclick="exportBackup()">💾 Download Backup</button>
+            </div>
+
+            <div class="sync-log" id="syncLog" style="display: none;">
+                <h4>📜 Sync Log</h4>
+                <div class="log-content" id="logContent"></div>
+            </div>
+
+            <div class="sync-help">
+                <h4>❓ How to Setup Sync</h4>
+                <ol>
+                    <li>On your laptop, find your IP address:
+                        <ul>
+                            <li><strong>Windows:</strong> Open Command Prompt, type <code>ipconfig</code></li>
+                            <li><strong>Mac:</strong> System Preferences → Network</li>
+                            <li><strong>Linux:</strong> Terminal, type <code>ip addr</code></li>
+                        </ul>
+                    </li>
+                    <li>Enter the IP address above</li>
+                    <li>Click "Test Connection"</li>
+                    <li>Once connected, "Sync All Data" will be enabled</li>
+                </ol>
+                <p><strong>Note:</strong> Make sure your laptop and phone are on the same WiFi network!</p>
             </div>
         </div>
     </div>
 
     <script>
+        // =============================================================================
+        // CONFIGURATION - Easy to modify counters and data structure
+        // =============================================================================
+        
+        // Add/remove counter IDs here to automatically initialize them
+        const COUNTER_IDS = [
+            'autoRingsScored',
+            'autoMogos', 
+            'autoCornerRings',
+            'driverRingsScored',
+            'driverMogos',
+            'driverCornerRings'
+        ];
+
         // Global variables
         let matches = JSON.parse(localStorage.getItem('vexScoutMatches') || '[]');
-        let counters = {
-            autoRingsScored: 0,
-            autoMogos: 0,
-            driverRingsScored: 0,
-            driverMogos: 0
-        };
+        let syncedMatches = JSON.parse(localStorage.getItem('vexScoutSyncedMatches') || '[]');
+        let counters = {};
+        
+        // Initialize all counters to 0
+        COUNTER_IDS.forEach(id => {
+            counters[id] = 0;
+        });
+
+        // =============================================================================
+        // CORE APP FUNCTIONS
+        // =============================================================================
 
         // Auto-backup every 30 seconds
         setInterval(() => {
             localStorage.setItem('vexScoutMatches', JSON.stringify(matches));
+            localStorage.setItem('vexScoutSyncedMatches', JSON.stringify(syncedMatches));
         }, 30000);
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            updateMatchCount();
+            updateMatchCounts();
             updateDataView();
-            updateDataSummary();
+            loadSyncSettings();
             
             // Register service worker
             if ('serviceWorker' in navigator) {
@@ -184,6 +359,10 @@
             if (localStorage.getItem('vexScoutInstalled')) {
                 document.getElementById('installBanner').style.display = 'none';
             }
+
+            // Save sync settings when changed
+            document.getElementById('laptopIP').addEventListener('change', saveSyncSettings);
+            document.getElementById('syncPort').addEventListener('change', saveSyncSettings);
         });
 
         function switchTab(tabName) {
@@ -195,9 +374,9 @@
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tabName + '-tab').classList.add('active');
 
-            // Update data when switching to data or export tabs
+            // Update data when switching tabs
             if (tabName === 'data') updateDataView();
-            if (tabName === 'export') updateDataSummary();
+            if (tabName === 'sync') updateSyncTab();
         }
 
         function changeCounter(counterId, delta) {
@@ -226,50 +405,92 @@
                 document.getElementById('teamError').style.display = 'none';
             }
 
+            // Collect all form data automatically
             const matchData = {
                 id: Date.now(),
                 timestamp: new Date().toISOString(),
+                synced: false,
+                
+                // Basic info
                 matchNumber: parseInt(matchNumber),
                 teamNumber: teamNumber,
+                alliance: document.getElementById('alliance').value,
+                
+                // Autonomous data
                 autonomous: {
                     goalRush: document.querySelector('input[name="autoGoalRush"]:checked').value === 'yes',
                     ringsScored: counters.autoRingsScored,
-                    mogosScored: counters.autoMogos
+                    mogosScored: counters.autoMogos,
+                    cornerRings: counters.autoCornerRings
                 },
+                
+                // Driver control data  
                 driverControl: {
                     ringsScored: counters.driverRingsScored,
-                    mogosControlled: counters.driverMogos
+                    mogosControlled: counters.driverMogos,
+                    cornerRings: counters.driverCornerRings,
+                    robotSpeed: document.getElementById('robotSpeed').value
                 },
+                
+                // Endgame
                 endgame: document.querySelector('input[name="endgame"]:checked').value,
+                
+                // Qualitative
+                qualitative: {
+                    defenseRating: document.getElementById('defenseRating').value,
+                    driverSkill: document.getElementById('driverSkill').value,
+                    reliability: {
+                        brokeDown: document.getElementById('brokeDown').checked,
+                        tippedOver: document.getElementById('tippedOver').checked,
+                        stuckOnField: document.getElementById('stuckOnField').checked,
+                        slowRepairs: document.getElementById('slowRepairs').checked
+                    }
+                },
+                
+                // Notes
                 notes: document.getElementById('notes').value.trim()
             };
 
             matches.push(matchData);
             localStorage.setItem('vexScoutMatches', JSON.stringify(matches));
             
-            updateMatchCount();
+            updateMatchCounts();
             resetForm();
             
             // Show success message
-            showSuccessMessage('Match data saved successfully!');
+            showSuccessMessage('Match data saved locally! 📱');
         }
 
         function resetForm() {
             document.getElementById('scoutForm').reset();
             
             // Reset counters
-            Object.keys(counters).forEach(key => {
-                counters[key] = 0;
-                document.getElementById(key).textContent = '0';
+            COUNTER_IDS.forEach(id => {
+                counters[id] = 0;
+                document.getElementById(id).textContent = '0';
             });
             
-            // Reset radio buttons
+            // Reset radio buttons to defaults
             document.querySelector('input[name="autoGoalRush"][value="no"]').checked = true;
             document.querySelector('input[name="endgame"][value="none"]').checked = true;
+            
+            // Reset checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            // Reset dropdowns to default
+            document.getElementById('alliance').selectedIndex = 0;
+            document.getElementById('robotSpeed').value = 'average';
+            document.getElementById('defenseRating').value = 'average';
+            document.getElementById('driverSkill').value = 'average';
         }
 
-        function updateMatchCount() {
-            document.getElementById('matchCount').textContent = matches.length;
+        function updateMatchCounts() {
+            const unsyncedCount = matches.filter(m => !m.synced).length;
+            document.getElementById('localCount').textContent = matches.length;
+            document.getElementById('syncedCount').textContent = syncedMatches.length;
+            document.getElementById('totalLocalMatches').textContent = matches.length;
+            document.getElementById('unsyncedMatches').textContent = unsyncedCount;
+            document.getElementById('pendingCount').textContent = unsyncedCount;
         }
 
         function updateDataView() {
@@ -281,16 +502,20 @@
             }
 
             matchList.innerHTML = matches.map(match => `
-                <div class="match-item">
+                <div class="match-item ${match.synced ? 'synced' : 'unsynced'}">
+                    <div class="sync-indicator">
+                        ${match.synced ? '✅' : '⏳'}
+                    </div>
                     <button class="delete-match" onclick="deleteMatch(${match.id})">×</button>
                     <div class="match-header">
-                        <div class="match-title">Match ${match.matchNumber} - Team ${match.teamNumber}</div>
+                        <div class="match-title">Match ${match.matchNumber} - Team ${match.teamNumber} (${match.alliance})</div>
                     </div>
                     <div class="match-time">${new Date(match.timestamp).toLocaleString()}</div>
                     <div class="match-details">
                         <strong>Auto:</strong> ${match.autonomous.ringsScored} rings, ${match.autonomous.mogosScored} mogos${match.autonomous.goalRush ? ', Goal Rush' : ''}<br>
                         <strong>Driver:</strong> ${match.driverControl.ringsScored} rings, ${match.driverControl.mogosControlled} mogos<br>
                         <strong>Endgame:</strong> ${match.endgame}<br>
+                        <strong>Driver Skill:</strong> ${match.qualitative.driverSkill}<br>
                         ${match.notes ? `<strong>Notes:</strong> ${match.notes}` : ''}
                     </div>
                 </div>
@@ -301,33 +526,215 @@
             if (confirm('Delete this match data?')) {
                 matches = matches.filter(match => match.id !== matchId);
                 localStorage.setItem('vexScoutMatches', JSON.stringify(matches));
-                updateMatchCount();
+                updateMatchCounts();
                 updateDataView();
-                updateDataSummary();
             }
         }
 
         function clearAllData() {
-            if (confirm('Are you sure you want to delete all match data? This cannot be undone.')) {
+            if (confirm('Are you sure you want to delete all local match data? This cannot be undone.')) {
                 matches = [];
                 localStorage.removeItem('vexScoutMatches');
-                updateMatchCount();
+                updateMatchCounts();
                 updateDataView();
-                updateDataSummary();
-                showSuccessMessage('All data cleared!');
+                showSuccessMessage('All local data cleared! 🗑️');
             }
         }
 
-        function exportToEmail() {
+        // =============================================================================
+        // SYNC FUNCTIONS - Connect to your laptop
+        // =============================================================================
+
+        function saveSyncSettings() {
+            const settings = {
+                laptopIP: document.getElementById('laptopIP').value,
+                syncPort: document.getElementById('syncPort').value
+            };
+            localStorage.setItem('vexScoutSyncSettings', JSON.stringify(settings));
+        }
+
+        function loadSyncSettings() {
+            const settings = JSON.parse(localStorage.getItem('vexScoutSyncSettings') || '{}');
+            if (settings.laptopIP) document.getElementById('laptopIP').value = settings.laptopIP;
+            if (settings.syncPort) document.getElementById('syncPort').value = settings.syncPort;
+        }
+
+        function updateSyncTab() {
+            updateMatchCounts();
+            updateSyncStatus();
+        }
+
+        function updateSyncStatus() {
+            const statusIndicator = document.getElementById('syncStatus');
+            const statusDot = statusIndicator.querySelector('.status-dot');
+            const statusText = statusIndicator.querySelector('span');
+            
+            // For now, always show offline - you'll implement the actual connection test
+            statusDot.className = 'status-dot offline';
+            statusText.textContent = 'Not Connected';
+        }
+
+        async function testConnection() {
+            const laptopIP = document.getElementById('laptopIP').value;
+            const port = document.getElementById('syncPort').value;
+            
+            if (!laptopIP) {
+                alert('Please enter your laptop IP address');
+                return;
+            }
+
+            addToSyncLog('🔍 Testing connection to ' + laptopIP + ':' + port + '...');
+            
+            try {
+                // This is where you'd implement the actual connection test
+                // For now, we'll simulate it
+                
+                const url = `http://${laptopIP}:${port}/api/test`;
+                
+                // Placeholder for actual fetch request
+                // const response = await fetch(url, { method: 'GET' });
+                
+                // Simulate connection test
+                setTimeout(() => {
+                    // You'll replace this with actual connection logic
+                    addToSyncLog('❌ Connection failed - make sure your laptop server is running');
+                    
+                    // When connection succeeds, you'd do:
+                    // addToSyncLog('✅ Connection successful!');
+                    // document.getElementById('syncButton').disabled = false;
+                    // updateSyncStatus(); // Update to show connected
+                }, 1000);
+                
+            } catch (error) {
+                addToSyncLog('❌ Connection error: ' + error.message);
+            }
+        }
+
+        async function syncToLaptop() {
+    const syncButton = document.getElementById('syncButton');
+    const syncLog = document.getElementById('syncLog');
+    const ipAddress = document.getElementById('laptopIP').value.trim();
+    
+    if (!ipAddress) {
+        addSyncLog('❌ Please enter laptop IP address', 'error');
+        return;
+    }
+    
+    syncButton.disabled = true;
+    syncButton.textContent = 'Syncing...';
+    
+    try {
+        // Get unsynced matches
+        const matches = JSON.parse(localStorage.getItem('scoutData') || '[]');
+        const unsyncedMatches = matches.filter(match => !match.synced);
+        
+        if (unsyncedMatches.length === 0) {
+            addSyncLog('✅ No unsynced data found', 'success');
+            return;
+        }
+        
+        addSyncLog(`📤 Sending ${unsyncedMatches.length} matches...`);
+        
+        // Send data to laptop
+        const response = await fetch(`http://${ipAddress}:3000/api/matches`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                matches: unsyncedMatches,
+                deviceInfo: {
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent
+                }
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            
+            // Mark matches as synced
+            matches.forEach(match => {
+                if (!match.synced && unsyncedMatches.some(um => um.id === match.id)) {
+                    match.synced = true;
+                    match.syncedAt = new Date().toISOString();
+                }
+            });
+            
+            // Save updated data
+            localStorage.setItem('scoutData', JSON.stringify(matches));
+            
+            // Update display
+            displayMatches();
+            updateSyncTab();
+            
+            addSyncLog(`✅ Successfully synced ${unsyncedMatches.length} matches!`, 'success');
+        } else {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Sync error:', error);
+        addSyncLog(`❌ Sync failed: ${error.message}`, 'error');
+    } finally {
+        syncButton.disabled = false;
+        syncButton.textContent = 'Sync to Laptop';
+    }
+}
+
+// Also update the test connection function
+async function testConnection() {
+    const testButton = document.getElementById('testButton');
+    const syncLog = document.getElementById('syncLog');
+    const ipAddress = document.getElementById('laptopIP').value.trim();
+    
+    if (!ipAddress) {
+        addSyncLog('❌ Please enter laptop IP address', 'error');
+        return;
+    }
+    
+    testButton.disabled = true;
+    testButton.textContent = 'Testing...';
+    
+    try {
+        addSyncLog('🔍 Testing connection...');
+        
+        const response = await fetch(`http://${ipAddress}:3000/api/test`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            addSyncLog('✅ Connection successful! Server is reachable.', 'success');
+        } else {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        
+    } catch (error) {
+        console.error('Connection test error:', error);
+        addSyncLog(`❌ Connection failed: ${error.message}`, 'error');
+        addSyncLog('Make sure the server is running on your laptop and you\'re on the same network.');
+    } finally {
+        testButton.disabled = false;
+        testButton.textContent = 'Test Connection';
+    }
+}
+
+        function exportBackup() {
             const data = {
                 exportDate: new Date().toISOString(),
                 totalMatches: matches.length,
-                matches: matches
+                syncedMatches: syncedMatches.length,
+                matches: matches,
+                syncedMatchesData: syncedMatches
             };
             
             const jsonData = JSON.stringify(data, null, 2);
             const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-            const filename = `vex-scout-data-${timestamp}.json`;
+            const filename = `vex-scout-backup-${timestamp}.json`;
             
             const blob = new Blob([jsonData], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -338,40 +745,28 @@
             a.click();
             
             URL.revokeObjectURL(url);
-            
-            showExportSuccess('Data exported successfully! Check your downloads folder.');
+            addToSyncLog('💾 Backup downloaded: ' + filename);
         }
 
-        function copyToClipboard() {
-            const data = {
-                exportDate: new Date().toISOString(),
-                totalMatches: matches.length,
-                matches: matches
-            };
+        function addToSyncLog(message) {
+            const logContent = document.getElementById('logContent');
+            const syncLog = document.getElementById('syncLog');
             
-            const jsonData = JSON.stringify(data, null, 2);
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `<span class="log-time">[${timestamp}]</span> ${message}`;
             
-            navigator.clipboard.writeText(jsonData).then(() => {
-                showExportSuccess('Data copied to clipboard! You can now paste it in any app.');
-            }).catch(() => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = jsonData;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                showExportSuccess('Data copied to clipboard!');
-            });
+            logContent.appendChild(logEntry);
+            syncLog.style.display = 'block';
+            
+            // Scroll to bottom
+            logContent.scrollTop = logContent.scrollHeight;
         }
 
-        function updateDataSummary() {
-            document.getElementById('totalMatches').textContent = matches.length;
-            const lastUpdated = matches.length > 0 
-                ? new Date(Math.max(...matches.map(m => new Date(m.timestamp)))).toLocaleString()
-                : 'Never';
-            document.getElementById('lastUpdated').textContent = lastUpdated;
-        }
+        // =============================================================================
+        // UTILITY FUNCTIONS
+        // =============================================================================
 
         function showSuccessMessage(message) {
             const existingMessage = document.querySelector('.success-message');
@@ -386,13 +781,13 @@
             setTimeout(() => successDiv.remove(), 3000);
         }
 
-        function showExportSuccess(message) {
-            const exportSuccess = document.getElementById('exportSuccess');
-            exportSuccess.innerHTML = `<div class="success-message">${message}</div>`;
-            exportSuccess.style.display = 'block';
+        function showSyncSuccess(message) {
+            const syncSuccess = document.getElementById('syncSuccess');
+            syncSuccess.innerHTML = `<div class="success-message">${message}</div>`;
+            syncSuccess.style.display = 'block';
             
             setTimeout(() => {
-                exportSuccess.style.display = 'none';
+                syncSuccess.style.display = 'none';
             }, 5000);
         }
 
