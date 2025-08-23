@@ -366,18 +366,25 @@
         });
 
         function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + '-tab').classList.add('active');
-
-            // Update data when switching tabs
-            if (tabName === 'data') updateDataView();
-            if (tabName === 'sync') updateSyncTab();
+    // Update tab buttons
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+    
+    // Find and activate the correct tab button
+    const tabButtons = document.querySelectorAll('.nav-tab');
+    tabButtons.forEach(tab => {
+        if (tab.textContent.toLowerCase() === tabName) {
+            tab.classList.add('active');
         }
+    });
+
+    // Update tab content
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    document.getElementById(tabName + '-tab').classList.add('active');
+
+    // Update data when switching tabs
+    if (tabName === 'data') updateDataView();
+    if (tabName === 'sync') updateSyncTab();
+}
 
         function changeCounter(counterId, delta) {
             const currentValue = parseInt(document.getElementById(counterId).textContent);
